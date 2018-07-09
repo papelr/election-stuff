@@ -1,2 +1,2 @@
 # election-stuff
-poking around TN HoR districts
+Started off with looking at the viability of Democrat Mariah Phillips beating the GOP incumbent DesJarlais in TN's District 4...
