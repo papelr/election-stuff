@@ -33,7 +33,6 @@ pew_data %>%
   geom_bar(aes(ideo))
 
 # Income filter
-pew_data$income <- gsub('[[OR]]', '', pew_data$income) 
 pew_data %>% 
   select(racecmb, age, income, party, ideo, state, marital) %>%
   filter(state == "Tennessee",
@@ -42,3 +41,20 @@ pew_data %>%
   group_by(income) %>% 
   ggplot() +
   geom_bar(aes(income))
+
+# GLM model 
+pew_data$income <- gsub("\\[|\\]", "", pew_data$income) 
+pew_data$income <- gsub("[OR]", "", pew_data$income)
+
+TN_filtered <- pew_data %>% 
+  select(racecmb, age, income, party, ideo, state) %>%
+  filter(state == "Tennessee",
+         income != "VOL. DO NOT READ Don't know/Refused",
+         income != "VL. D NT EAD Don't know/efused",
+         ideo != "Don't know/Refused (VOL.)",
+         party != "Don't know/Refused (VOL.)",
+         party != "No preference (VOL.)") %>% 
+  group_by(state) 
+ 
+glm(party ~ ideo , TN_filtered, family = "quasibinomial") %>%  
+  summary() 
