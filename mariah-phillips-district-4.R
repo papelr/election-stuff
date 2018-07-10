@@ -34,7 +34,7 @@ votes_numbers <- District_4 %>%
     subtitle = "Voting numbers, last 4 cycles",
     x = "Year",
     y = "Votes",
-    caption = "Data from Clerk of the House, Plot by R. Papel") +
+    caption = "Data from www.history.house.gov, Plot by R. Papel") +
   theme(
     plot.title = element_text(face = "bold", size = 12),
     plot.caption = element_text(face = "italic"),
@@ -63,7 +63,7 @@ votes_standardized <- District_4 %>%
     subtitle = "Voting numbers standardized, last 4 cycles",
     x = "Year",
     y = "Vote Proportion",
-    caption = "Data from Clerk of the House, Plot by R. Papel") +
+    caption = "Data from www.history.house.gov, Plot by R. Papel") +
   theme(
     plot.title = element_text(face = "bold", size = 12),
     plot.caption = element_text(face = "italic"),
