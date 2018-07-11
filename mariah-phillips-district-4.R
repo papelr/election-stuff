@@ -47,7 +47,8 @@ votes_numbers <- District_4 %>%
     axis.title.x = element_text(size = 11, face = "bold", color = "black")
   ) +
   guides(fill = guide_legend(title = "Legend")) +
-  scale_y_continuous(labels = scales::comma)
+  scale_y_continuous(labels = scales::comma,
+                     breaks = c(0, 50000, 100000, 150000, 200000, 250000))
 
 # Graph with position = "fill"
 votes_standardized <- District_4 %>%
