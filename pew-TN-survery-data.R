@@ -10,7 +10,7 @@
 library(tidyverse)
 library(foreign)
 library(stringr)
-library(fastDummies)
+library(broom)
 
 pew_data <- read.spss("Typology 17 Public.sav", to.data.frame = TRUE)
 head(pew_data)
@@ -67,7 +67,17 @@ glm(party ~ ideo , TN_filtered, family = "quasibinomial") %>%
   summary() 
 
 # Using fastDummies package to code dummy variables on categorical objects
-TN_filtered$ideo <- dummy_cols(TN_filtered$ideo, select_columns = ideo)
+TN_filtered <- dummy_cols(TN_filtered, select_columns = "ideo")
+TN_filtered <- dummy_cols(TN_filtered, select_columns = "party")
+glm(party ~ ideo, TN_filtered, family = "quasibinomial") %>% 
+  summary()
+
+# fastDummies did not really do anything, so here's ideology and party affil.
+# BUT it did allow me to actually make the dummy variables, which makes for
+# easy plotting
+ggplot(TN_filtered) +
+  geom_bar(aes(ideo, fill = party)) +
+  scale_fill_manual(values = c("#E0162B", "#0052A5", "gray"))
 
 
 #'###### -------------**Entire set formatting**---------------------- ######
@@ -138,7 +148,40 @@ base <- pew_data %>%
 
 # shows the important factors on who votes for what party
 glm(party ~ ideo + racecmb + income, base, family = "quasibinomial") %>%  
-  summary() # shows the important factors on who votes for what party
+  summary() # shows the important factors on who votes for what party:
+  # ideoConservative ***
+  # ideoModerate ***
+  # ideoLiberal ***
+  # ideoVery liberal ***
+  # racecmbBlack ***
+  # racecmb Asian *
+  # racecmbSome othe race ***
+  # income10 to under $20,000 **
+  # incomeLess thatn $10,000 ***
+
+# Looking at ideo_Conservative and party (dummy coding first)
+base <- dummy_cols(base, select_columns = "ideo")
+base <- dummy_cols(base, select_columns = "party")
+base <- dummy_cols(base, select_columns = "income")
+ggplot(base) +
+  geom_bar(aes(ideo_Conservative, fill = party)) +
+  scale_fill_manual(values = c("#E0162B", "#0052A5", "gray")) 
+  
+# Looking at ideo_Moderate and party
+ggplot(base) +
+  geom_bar(aes(ideo_Moderate, fill = party)) +
+  scale_fill_manual(values = c("#E0162B", "#0052A5", "gray"))
+
+# Looking at ideo_Liberal and party
+ggplot(base) +
+  geom_bar(aes(ideo_Liberal, fill = party)) +
+  scale_fill_manual(values = c("#E0162B", "#0052A5", "gray"))
+
+# Looking at income_10 to under $20,000 and party
+ggplot(base) +
+  geom_bar(aes(`income_10 to under $20,000`, fill = party)) +
+  scale_fill_manual(values = c("#E0162B", "#0052A5", "gray"))
+
 
 # More Independents describe themselves as moderate (duh)
 ggplot(base) +
@@ -146,11 +189,16 @@ ggplot(base) +
   scale_fill_manual(values = c("#E0162B", "#0052A5", "gray")) +
   coord_flip()
 
+
+
 # Plotting the GLM with a predict funtion (can't get it to work)
 base_mod <- glm(party ~ ideo + racecmb + income, family = "quasibinomial", base)
 base_pred <- predict(base_mod, type = "response", se.fit = T)
 base$pred <- base_pred$fit
 base$se   <- base_pred$se.fit
+
+base_mod  %>% 
+  augment() 
 
 # Plot of age and party affiliation across the US
 age_party <- ggplot(base, aes(age, fill = party)) +
