@@ -37,3 +37,22 @@ trends_data$SATISF_W26 # satisfied/diss w/ country today?
 trends_data$SATISFY_W26 # satisfied/diss w/ local community?
 
 # Renaming variables to something other than Pew gobblydegook
+selected_trends <- trends_data %>% 
+  select(
+    income = F_INCOME_RECODE_FINAL,
+    party = F_PARTY_FINAL, 
+    ideology = F_IDEO_FINAL, 
+    edu_level = F_EDUCCAT2_FINAL, 
+    sex = F_SEX_FINAL, 
+    age = F_AGECAT_FINAL, 
+    region = F_CREGION_FINAL, 
+    family_threatened = GUNTHREAT_W26, 
+    gun_in_child_home = GROWUPGUN1_W26, 
+    gun_violence_child_comm = GROWUPVIOL_W26, 
+    gun_child_comm = GROWUPCOM_W26, 
+    social_trust = SOCTRUST_W26,
+    importantance_guns = GUNIDENTITY_W26, 
+    local_safe_comm = SAFECRIME_W26, 
+    satisfy_US = SATISF_W26, 
+    satisfy_local_comm = SATISFY_W26) 
+ 
